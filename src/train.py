@@ -1,0 +1,54 @@
+import torch
+from torch.nn import BCELoss
+from torch.optim import Adam
+from tqdm import tqdm
+
+from dataloader import train_loader, val_loader
+from model import Model
+from constants import NUM_EPOCHS, LEARNING_RATE
+
+# Select CUDA for training if available
+if torch.cuda.is_available():
+    device = torch.device("cuda")
+    print("Using device CUDA")
+else:
+    device = torch.device("cpu")
+    print("Using device CPU")
+
+# Initialize model, loss function and optimizer
+model = Model().to(device)
+criterion = BCELoss()
+optimizer = Adam(model.parameters(), lr=LEARNING_RATE)
+
+# Training/Validation Pipeline
+print("Starting Training...")
+for epoch in tqdm(range(NUM_EPOCHS)):
+    # Training
+    train_loss = 0
+    model.train()
+    for x, y in train_loader:
+        x = x.float()
+        x, y = x.to(device), y.to(device)
+        pred = model.forward(x)
+        pred = pred.squeeze()
+        y = y.float()
+        loss = criterion(pred, y)
+        # Backpropagation
+        loss.backward()
+        optimizer.step()
+        optimizer.zero_grad()
+        train_loss += loss.item()
+    print(f"Epoch {epoch}/ {NUM_EPOCHS}  Training Loss: {train_loss}")
+
+    # Validation
+    valid_loss = 0
+    model.eval()
+    for x, y in val_loader:
+        x = x.float()
+        x, y = x.to(device), y.to(device)
+        pred = model.forward(x)
+        pred = pred.squeeze()
+        y = y.float()
+        loss = criterion(pred, y)
+        valid_loss += loss.item()
+    print(f"Validation Loss: {valid_loss}")
