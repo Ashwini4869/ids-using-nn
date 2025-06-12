@@ -6,5 +6,6 @@
 
 ### Date: 2025-06-12
 - Add file logging feature
-- Model is overfitting on the dataset (validation loss increasing while training loss is decreasing)
-- 
+- Model is overfitting on the dataset (validation loss increasing while training loss is decreasing) -> Need to try out regularization techniques(add weight decay, dropout, decrease batch size)
+- Adding weight decay leads to a more stable training
+- Need to add testing pipeline for final accuracy and F1-Score

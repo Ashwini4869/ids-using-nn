@@ -6,7 +6,7 @@ from tqdm import tqdm
 
 from dataloader import train_loader, val_loader
 from model import Model
-from constants import NUM_EPOCHS, LEARNING_RATE
+from constants import NUM_EPOCHS, LEARNING_RATE, WEIGHT_DECAY
 from utils import setup_log_file, log_metrics
 
 log_file = setup_log_file()
@@ -21,7 +21,7 @@ else:
 # Initialize model, loss function and optimizer
 model = Model().to(device)
 criterion = BCELoss()
-optimizer = Adam(model.parameters(), lr=LEARNING_RATE)
+optimizer = Adam(model.parameters(), lr=LEARNING_RATE, weight_decay=WEIGHT_DECAY)
 
 # Training/Validation Pipeline
 print("Starting Training...")

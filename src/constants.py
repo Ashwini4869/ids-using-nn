@@ -5,4 +5,5 @@ SPLITS = {"train": "train.csv", "test": "test.csv"}
 # Hyperparameters
 NUM_EPOCHS = 10
 LEARNING_RATE = 0.001
+WEIGHT_DECAY = 0.01
 BATCH_SIZE = 128
