@@ -1,3 +1,4 @@
+import os
 import torch
 from torch.nn import BCELoss
 from torch.optim import Adam
@@ -6,7 +7,9 @@ from tqdm import tqdm
 from dataloader import train_loader, val_loader
 from model import Model
 from constants import NUM_EPOCHS, LEARNING_RATE
+from utils import setup_log_file, log_metrics
 
+log_file = setup_log_file()
 # Select CUDA for training if available
 if torch.cuda.is_available():
     device = torch.device("cuda")
@@ -52,3 +55,5 @@ for epoch in tqdm(range(NUM_EPOCHS)):
         loss = criterion(pred, y)
         valid_loss += loss.item()
     print(f"Validation Loss: {valid_loss}")
+
+    log_metrics(log_file, epoch, train_loss, valid_loss)
