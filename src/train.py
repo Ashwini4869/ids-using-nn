@@ -3,6 +3,7 @@ import torch
 from torch.nn import BCELoss
 from torch.optim import Adam
 from tqdm import tqdm
+import time
 
 from dataloader import train_loader, val_loader
 from model import Model
@@ -57,3 +58,8 @@ for epoch in tqdm(range(NUM_EPOCHS)):
     print(f"Validation Loss: {valid_loss}")
 
     log_metrics(log_file, epoch, train_loss, valid_loss)
+
+# Save the model
+trained_model_path = f"models/model_{time.strftime('%Y-%m-%d-%H-%M')}.pt"
+torch.save(model.state_dict(), trained_model_path)
+print(f"Model saved to {trained_model_path}")
