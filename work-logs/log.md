@@ -20,5 +20,6 @@
 - Save model after training
 - Add multiple layers with dropout -> improves performance
 - Increasing weight decay to 0.02 and lr to 0.01 -> does not converge at all
-- 
+- Update training hyperparameters and model architecture
+- Migration to 17 server for faster training
 
