@@ -1,30 +1,28 @@
 from torch import nn
-from constants import DROPOUT_RATE
+from constants import DROPOUT_RATE, HIDDEN_SIZE
 
 
 class Model(nn.Module):
     def __init__(self):
         super().__init__()
         self.layers = nn.Sequential(
-            # First layer: larger to capture more features
-            nn.Linear(118, 128),
-            nn.BatchNorm1d(128),  # Add batch normalization
-            nn.ReLU(),
-            nn.Dropout(DROPOUT_RATE),
-            # Second layer: gradual reduction
-            nn.Linear(128, 64),
-            nn.BatchNorm1d(64),
-            nn.ReLU(),
-            nn.Dropout(DROPOUT_RATE),
-            # Third layer: further reduction
-            nn.Linear(64, 32),
-            nn.BatchNorm1d(32),
+            # Input regularization
+            nn.Dropout(DROPOUT_RATE/2),  # Light dropout on input
+            # Single hidden layer with strong regularization
+            nn.Linear(118, HIDDEN_SIZE),
+            nn.LayerNorm(HIDDEN_SIZE),
             nn.ReLU(),
             nn.Dropout(DROPOUT_RATE),
             # Output layer
-            nn.Linear(32, 1),
+            nn.Linear(HIDDEN_SIZE, 1),
             nn.Sigmoid(),
         )
+        
+        # Initialize weights properly
+        for m in self.modules():
+            if isinstance(m, nn.Linear):
+                nn.init.kaiming_normal_(m.weight)
+                nn.init.constant_(m.bias, 0)
 
     def forward(self, x):
         return self.layers(x)

@@ -1,4 +1,5 @@
-# Project Logs
+# Project Logs  
+Just a simple logs of my work done on this project. You can safely ignore this!
 
 ### Date: 2025-06-02
 - Implemented training pipeline
@@ -23,3 +24,7 @@
 - Update training hyperparameters and model architecture
 - Migration to 17 server for faster training
 
+### Date: 2025-06-19
+- Reported F1-Score: 0.7
+- Try different overfitting techniques and hyperparameters
+- Sample train SVM and random forest on the dataset for comparison

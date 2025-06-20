@@ -1,13 +1,12 @@
 import os
 import torch
-from torch.utils.data import DataLoader
 import numpy as np
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from tqdm import tqdm
 
 from model import Model
-from dataloader import NSLKDDDataset
-from constants import BATCH_SIZE, TEST_MODEL_PATH
+from dataloader import test_loader
+from constants import TEST_MODEL_PATH
 
 
 def load_model(model_path):
@@ -57,12 +56,7 @@ def main():
     if not os.path.exists(model_path):
         print(f"Error: Model not found at {model_path}")
         return
-
-    # Load test dataset
-    print("Loading test dataset...")
-    test_dataset = NSLKDDDataset(split="val")  # val split contains test data
-    test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=False)
-
+    
     # Load model
     print("Loading model...")
     model = load_model(model_path)
