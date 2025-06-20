@@ -1,4 +1,4 @@
-from torch.utils.data import Dataset, DataLoader, random_split
+from torch.utils.data import Dataset, DataLoader, random_split, WeightedRandomSampler
 import pandas as pd
 import numpy as np
 import torch
@@ -18,9 +18,12 @@ X_train_processed, X_test_processed, y_train_encoded, y_test_encoded, _, _ = (
 
 # Calculate class weights for balanced training
 train_counts = np.bincount(y_train_encoded)
-class_weights = torch.FloatTensor(1 / train_counts)
-class_weights = class_weights / class_weights.sum()  # Normalize weights
+total_samples = len(y_train_encoded)
+class_weights = torch.FloatTensor(total_samples / (len(train_counts) * train_counts))
 print("Class weights:", class_weights.numpy())
+
+# Calculate sample weights for WeightedRandomSampler
+sample_weights = torch.FloatTensor([class_weights[t] for t in y_train_encoded])
 
 
 # Define the torch dataset
@@ -44,12 +47,17 @@ test_dataset = NSLKDDDataset(X_test_processed, y_test_encoded)
 # Split training data into train and validation
 train_size = int((1 - VALIDATION_SPLIT) * len(full_train_dataset))
 val_size = len(full_train_dataset) - train_size
-train_dataset, val_dataset = random_split(
-    full_train_dataset, [train_size, val_size]
+train_dataset, val_dataset = random_split(full_train_dataset, [train_size, val_size])
+
+# Create sampler for training data
+train_sampler = WeightedRandomSampler(
+    weights=sample_weights[train_dataset.indices],
+    num_samples=len(train_dataset),
+    replacement=True,
 )
 
 # Creating dataloaders
 print("Creating data loaders...")
-train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)
+train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, sampler=train_sampler)
 val_loader = DataLoader(val_dataset, batch_size=BATCH_SIZE, shuffle=False)
 test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=False)

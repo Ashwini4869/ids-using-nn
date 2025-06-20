@@ -28,3 +28,8 @@ Just a simple logs of my work done on this project. You can safely ignore this!
 - Reported F1-Score: 0.7
 - Try different overfitting techniques and hyperparameters
 - Sample train SVM and random forest on the dataset for comparison
+- SVM and RF are able to perform almost at the same level of NN
+
+### Date: 2025-06-20
+- Modified the model and hyperparameters to get F1-Score of 0.7221 (model name: model_2025-06-20-15-54_best.pt )
+- Need to use additional measures for overfitting and already trained Neural Networks on NSL-KDD
