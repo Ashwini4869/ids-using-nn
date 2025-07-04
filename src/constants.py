@@ -20,7 +20,7 @@ LR_MIN = 1e-6  # Minimum learning rate
 EARLY_STOP_PATIENCE = 10  # Reduced patience due to better convergence
 
 # Model Architecture
-HIDDEN_SIZE = 18  # Increased for parallel paths
+HIDDEN_SIZE = 60  # Increased for parallel paths
 
 # Paths
-TEST_MODEL_PATH = "models/model_2025-06-20-18-02_best.pt"
+TEST_MODEL_PATH = "models/model_2025-07-04-16-07_best.pt"
